@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BaseTools</string>
+    <string name="menu_share_delete">delete</string>
+    <string name="menu_share_share">share</string>
+    <string name="share_apk_activity_name">shareapk</string>
+    <string name="select_action_name_shareapk">分享应用</string>
+    <string name="select_action_name_qrcode">扫一扫</string>
+    <string name="select_action_name_musicrepeater">复读机</string>
+    <string name="loading_share_message">Loading...</string>
+</resources>

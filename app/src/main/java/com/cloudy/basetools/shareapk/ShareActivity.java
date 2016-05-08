@@ -1,15 +1,14 @@
 package com.cloudy.basetools.shareapk;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -144,8 +143,8 @@ public class ShareActivity extends AppCompatActivity implements AdapterView.OnIt
             List<PackageInfo> packageInfoList = pm.getInstalledPackages(0);
             List<ShareItemBean> itemBeanList = new ArrayList<ShareItemBean>();
             for (int i = 0; i < packageInfoList.size(); i++) {
-                Drawable drawable = getAppIcon(packageInfoList.get(i).packageName, pm);
-                String appName = getAppName(packageInfoList.get(i).packageName, pm);
+                Drawable drawable = getAppIcon(packageInfoList.get(i), pm);
+                String appName = getAppName(packageInfoList.get(i), pm);
                 String appPath = getAppPathUri(packageInfoList.get(i));
                 String appSize = getAppSize(packageInfoList.get(i)) + " MB";
                 String appUpdateTime = getAppUpdateTime(packageInfoList.get(i));
@@ -155,14 +154,9 @@ public class ShareActivity extends AppCompatActivity implements AdapterView.OnIt
             return itemBeanList;
         }
 
-        private String getAppName(String packageName, PackageManager pm) {
+        private String getAppName(PackageInfo pi, PackageManager pm) {
             String appName = null;
-            try {
-                ApplicationInfo appInfo = pm.getApplicationInfo(packageName, 0);
-                appName = (String) pm.getApplicationLabel(appInfo);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
+            appName = (String) pm.getApplicationLabel(pi.applicationInfo);
             Log.d(TAG, "getAppName: " + appName);
             return appName;
         }
@@ -174,19 +168,13 @@ public class ShareActivity extends AppCompatActivity implements AdapterView.OnIt
         private String getAppSize(PackageInfo packageInfo) {
             File apkFile = new File(getAppPathUri(packageInfo));
             double size = (double) apkFile.length() / 1024 / 1024;
-            //BigDecimal bigdecimal =
             Log.d(TAG, "getAppSize: " + size + ",");
             return String.format("%.2f", size);
         }
 
-        private Drawable getAppIcon(String packageName, PackageManager pm) {
+        private Drawable getAppIcon(PackageInfo pi, PackageManager pm) {
             Drawable drawable = null;
-            try {
-                ApplicationInfo appInfo = pm.getApplicationInfo(packageName, 0);
-                drawable = pm.getApplicationIcon(appInfo);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            drawable = pm.getApplicationIcon(pi.applicationInfo);
             return drawable;
         }
 
